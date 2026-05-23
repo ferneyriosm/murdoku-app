@@ -8,11 +8,11 @@
     {"personaje": "Enid", "texto": "Estaba al lado del televisor."},
     {"personaje": "Vaughn", "texto": "La víctima."}
   ],
-  "etiquetasFilas": ["Austin", "Bárbara", "Charlotte", "Dean", "Enid", "Vaughn"],
-  "etiquetasColumnas": ["Dormitorio", "Baño", "Cocina", "Sala", "Patio", "Ático"],
   "restricciones": [
-    {"index": 0, "nombre": "Cama"},
-    {"index": 5, "nombre": "Planta"},
-    {"index": 35, "nombre": "TV"}
+    {"index": 0, "nombre": "Cama", "tipo": "usable"},
+    {"index": 2, "nombre": "Estante", "tipo": "bloqueado"},
+    {"index": 5, "nombre": "Planta", "tipo": "bloqueado"},
+    {"index": 30, "nombre": "Mesa", "tipo": "bloqueado"},
+    {"index": 35, "nombre": "TV", "tipo": "bloqueado"}
   ]
 }
