@@ -1,4 +1,3 @@
-//12
 class Nivel {
     constructor(titulo, pistas, restricciones, solucion) {
         this.titulo = titulo;
@@ -14,7 +13,7 @@ class Murdoku {
         this.nivel = nivel;
         this.estadoCeldas = new Array(tamaño * tamaño).fill(0);
         this.puntos = 0;
-        this.nivelCompletado = false; // Bandera para controlar puntos
+        this.nivelCompletado = false;
     }
 
     iniciarInterfaz() {
@@ -30,9 +29,7 @@ class Murdoku {
         this.renderizarTablero();
     }
 
-    actualizarPuntos() {
-        document.getElementById('puntos').innerText = this.puntos;
-    }
+    actualizarPuntos() { document.getElementById('puntos').innerText = this.puntos; }
 
     renderizarPistas() {
         const contenedor = document.getElementById('pistas-container');
@@ -60,7 +57,7 @@ class Murdoku {
                 
                 if (restriccion.tipo === 'bloqueado') {
                     celda.classList.add('bloqueado');
-                    celda.onclick = null; 
+                    celda.onclick = null; // Impide clic en muebles
                 }
             }
 
@@ -70,36 +67,24 @@ class Murdoku {
                 mark.innerText = this.estadoCeldas[i] === 1 ? 'O' : 'X';
                 celda.appendChild(mark);
             }
-
             grid.appendChild(celda);
         }
     }
 
     manejarClick(index) {
-        // No permitir clics si el nivel ya está completado
         if (this.nivelCompletado) return;
-        
         this.estadoCeldas[index] = (this.estadoCeldas[index] + 1) % 3;
         this.renderizarTablero();
     }
 
     comprobar() {
-        // Bloqueo de seguridad extra: si ya está completado, no hace nada
-        if (this.nivelCompletado) return; 
-
+        if (this.nivelCompletado) return;
         const esCorrecto = JSON.stringify(this.estadoCeldas) === JSON.stringify(this.nivel.solucion);
-        
         if (esCorrecto) {
             this.puntos += 100;
-            this.nivelCompletado = true; // Marcamos como completado
+            this.nivelCompletado = true;
             this.actualizarPuntos();
-            
-            // 1. Ocultar el botón
-            const btnComprobar = document.getElementById('btn-comprobar');
-            btnComprobar.classList.add('hidden');
-            // 2. Deshabilitar para que no se pueda clickear ni por error
-            btnComprobar.disabled = true;
-
+            document.getElementById('btn-comprobar').classList.add('hidden');
             document.getElementById('btn-siguiente').classList.remove('hidden');
             alert("¡Felicidades! Has resuelto el misterio.");
         } else {
@@ -108,24 +93,15 @@ class Murdoku {
     }
 
     limpiarYReiniciar() {
-        // Resetear datos
         this.estadoCeldas = new Array(this.tamaño * this.tamaño).fill(0);
-        this.nivelCompletado = false; // Importante: volvemos a permitir ganar puntos
-        
-        // Resetear botones UI
-        const btnComprobar = document.getElementById('btn-comprobar');
-        btnComprobar.classList.remove('hidden');
-        btnComprobar.disabled = false; // ¡Volvemos a habilitar el botón!
-        
+        this.nivelCompletado = false;
+        document.getElementById('btn-comprobar').classList.remove('hidden');
         document.getElementById('btn-siguiente').classList.add('hidden');
-        
-        // Volver a dibujar
         this.renderizar();
     }
 }
 
 let juego; 
-
 async function iniciarProceso() {
     try {
         const respuesta = await fetch('niveles/nivel1.json');
@@ -133,7 +109,5 @@ async function iniciarProceso() {
         const nivel = new Nivel(datos.titulo, datos.pistas, datos.restricciones, datos.solucion);
         juego = new Murdoku(6, nivel);
         juego.iniciarInterfaz();
-    } catch (error) {
-        console.error("Error al cargar el nivel:", error);
-    }
+    } catch (error) { console.error("Error al cargar el nivel:", error); }
 }
