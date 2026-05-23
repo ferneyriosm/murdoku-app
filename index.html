@@ -6,46 +6,51 @@
     <style>
         body { font-family: 'Segoe UI', sans-serif; text-align: center; background-color: #f0f2f5; padding: 20px; }
         .hidden { display: none; }
-        
         #pantalla-juego { max-width: 800px; margin: 0 auto; }
         
-        /* Contenedor limpio sin fondos oscuros */
         #grid-container { 
             display: grid; 
-            gap: 2px; 
+            gap: 1px; 
             margin: 20px auto; 
             justify-content: center;
-            background-color: #fff; 
-            padding: 2px;
+            background-color: #bdc3c7; /* Color de las líneas de la cuadrícula */
+            border: 1px solid #bdc3c7;
         }
         
         .cell { 
-            width: 50px; 
-            height: 50px; 
+            width: 50px; height: 50px; 
             background-color: white; 
-            border: 1px solid #ccc;
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            cursor: pointer; 
-            font-weight: bold;
+            position: relative; /* Clave para el posicionamiento */
+            display: flex; align-items: center; justify-content: center; 
+            cursor: pointer;
         }
 
-        .bloqueado { background-color: #dcdde1; color: #7f8c8d; font-size: 8px; text-align: center; cursor: not-allowed; border: 1px solid #a5b1c2; }
-        .usable { background-color: #f1f2f6; border: 1px dashed #a5b1c2; cursor: pointer; }
+        /* El nombre del objeto (ej: Cama) */
+        .object-name {
+            position: absolute; top: 2px; left: 2px;
+            font-size: 8px; color: #95a5a6;
+            pointer-events: none; /* No interfiere con el clic */
+        }
+
+        /* La marca (O / X) */
+        .mark {
+            font-size: 20px; font-weight: bold; color: #2c3e50;
+            pointer-events: none; /* No interfiere con el clic */
+        }
+
+        .bloqueado { background-color: #ecf0f1; cursor: not-allowed; }
+        .usable { background-color: white; }
 
         #stats { font-size: 1.2rem; font-weight: bold; margin: 10px; }
         #pistas-container { text-align: left; background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 20px; }
-        button { padding: 10px 20px; font-size: 16px; cursor: pointer; margin: 5px; }
+        button { padding: 10px 20px; font-size: 16px; cursor: pointer; margin: 5px; background-color: #2f3640; color: white; border: none; border-radius: 5px; }
     </style>
 </head>
 <body>
-
     <div id="pantalla-inicio">
         <h1>Bienvenido al Murdoku</h1>
         <button onclick="iniciarProceso()">Comenzar Juego</button>
     </div>
-
     <div id="pantalla-juego" class="hidden">
         <div id="stats">Puntos: <span id="puntos">0</span></div>
         <h2 id="titulo-nivel"></h2>
@@ -54,7 +59,6 @@
         <button onclick="juego.comprobar()">Comprobar Solución</button>
         <button id="btn-siguiente" class="hidden">Siguiente Nivel</button>
     </div>
-
     <script src="juego.js"></script>
 </body>
 </html>
