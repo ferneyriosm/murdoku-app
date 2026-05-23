@@ -1,4 +1,13 @@
-//11
+//12
+class Nivel {
+    constructor(titulo, pistas, restricciones, solucion) {
+        this.titulo = titulo;
+        this.pistas = pistas;
+        this.restricciones = restricciones;
+        this.solucion = solucion;
+    }
+}
+
 class Murdoku {
     constructor(tamaño, nivel) {
         this.tamaño = tamaño;
@@ -7,17 +16,27 @@ class Murdoku {
         this.puntos = 0;
     }
 
-    // ... (Mantén el resto de métodos igual: iniciarInterfaz, renderizarPistas)
+    iniciarInterfaz() {
+        document.getElementById('pantalla-inicio').classList.add('hidden');
+        document.getElementById('pantalla-juego').classList.remove('hidden');
+        this.renderizar();
+    }
 
     renderizar() {
         document.getElementById('titulo-nivel').innerText = this.nivel.titulo;
-        this.actualizarPuntos(); // Actualiza el span de puntos
+        this.actualizarPuntos();
         this.renderizarPistas();
         this.renderizarTablero();
     }
 
     actualizarPuntos() {
         document.getElementById('puntos').innerText = this.puntos;
+    }
+
+    renderizarPistas() {
+        const contenedor = document.getElementById('pistas-container');
+        contenedor.innerHTML = '<h3>Pistas:</h3><ul>' + 
+            this.nivel.pistas.map(p => `<li><strong>${p.personaje}:</strong> ${p.texto}</li>`).join('') + '</ul>';
     }
 
     renderizarTablero() {
@@ -32,6 +51,7 @@ class Murdoku {
             celda.className = 'cell';
             celda.onclick = () => this.manejarClick(i);
 
+            // Añadir nombre del objeto si existe
             if (restriccion) {
                 const label = document.createElement('span');
                 label.className = 'object-name';
@@ -44,6 +64,7 @@ class Murdoku {
                 }
             }
 
+            // Añadir la marca O/X
             if (this.estadoCeldas[i] !== 0) {
                 const mark = document.createElement('span');
                 mark.className = 'mark';
@@ -56,20 +77,35 @@ class Murdoku {
     }
 
     manejarClick(index) {
+        // Ciclo: 0 (vacío) -> 1 (O) -> 2 (X) -> 0
         this.estadoCeldas[index] = (this.estadoCeldas[index] + 1) % 3;
         this.renderizarTablero();
     }
 
     comprobar() {
         const esCorrecto = JSON.stringify(this.estadoCeldas) === JSON.stringify(this.nivel.solucion);
+        
         if (esCorrecto) {
             this.puntos += 100;
-            this.actualizarPuntos(); // Llamamos al actualizador
+            this.actualizarPuntos();
             document.getElementById('btn-siguiente').classList.remove('hidden');
-            alert("¡Felicidades!");
+            alert("¡Felicidades! Has resuelto el misterio.");
         } else {
-            alert("Sigue intentándolo.");
+            alert("Aún no es correcto. Recuerda marcar 'O' donde van las personas.");
         }
     }
 }
-// ... resto del archivo igual
+
+let juego; 
+
+async function iniciarProceso() {
+    try {
+        const respuesta = await fetch('niveles/nivel1.json');
+        const datos = await respuesta.json();
+        const nivel = new Nivel(datos.titulo, datos.pistas, datos.restricciones, datos.solucion);
+        juego = new Murdoku(6, nivel);
+        juego.iniciarInterfaz();
+    } catch (error) {
+        console.error("Error al cargar el nivel:", error);
+    }
+}
