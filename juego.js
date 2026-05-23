@@ -1,4 +1,3 @@
-//Listo
 class Nivel {
     constructor(titulo, pistas, restricciones) {
         this.titulo = titulo;
@@ -39,14 +38,19 @@ class Murdoku {
 
         for (let i = 0; i < this.tamaño * this.tamaño; i++) {
             const celda = document.createElement('div');
-            celda.className = 'cell';
-
+            
             const restriccion = this.nivel.restricciones.find(r => r.index === i);
 
             if (restriccion) {
-                celda.classList.add('restricted');
                 celda.innerText = restriccion.nombre;
+                if (restriccion.tipo === 'bloqueado') {
+                    celda.className = 'cell bloqueado';
+                } else {
+                    celda.className = 'cell usable';
+                    celda.onclick = () => this.manejarClick(i);
+                }
             } else {
+                celda.className = 'cell';
                 if (this.estadoCeldas[i] === 1) celda.innerText = 'O';
                 if (this.estadoCeldas[i] === 2) celda.innerText = 'X';
                 celda.onclick = () => this.manejarClick(i);
@@ -56,6 +60,10 @@ class Murdoku {
     }
 
     manejarClick(index) {
+        // Solo cambiar si no es un objeto bloqueado
+        const restriccion = this.nivel.restricciones.find(r => r.index === index);
+        if (restriccion && restriccion.tipo === 'bloqueado') return;
+
         this.estadoCeldas[index] = (this.estadoCeldas[index] + 1) % 3;
         this.renderizarTablero();
     }
@@ -67,10 +75,7 @@ async function iniciarProceso() {
     try {
         const respuesta = await fetch('niveles/nivel1.json');
         const datos = await respuesta.json();
-
-        // Nivel ahora no necesita las etiquetas porque no las renderizamos en pantalla
         const nivel = new Nivel(datos.titulo, datos.pistas, datos.restricciones);
-        
         juego = new Murdoku(6, nivel);
         juego.iniciarInterfaz();
     } catch (error) {
