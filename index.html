@@ -4,38 +4,46 @@
     <meta charset="UTF-8">
     <title>Murdoku Pro</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; background-color: #f0f2f5; padding: 20px; }
+        body { font-family: 'Segoe UI', sans-serif; text-align: center; background-color: #f0f2f5; padding: 20px; }
         .hidden { display: none; }
         
         #pantalla-juego { max-width: 800px; margin: 0 auto; }
         
-        /* Contenedor del tablero */
         #grid-container { 
             display: grid; 
             gap: 2px; 
             margin: 20px auto; 
             justify-content: center;
+            background-color: #333;
+            padding: 2px;
+            border: 2px solid #333;
         }
         
         .cell { 
             width: 50px; 
             height: 50px; 
-            border: 1px solid #999; 
+            background-color: white; 
             display: flex; 
             align-items: center; 
             justify-content: center; 
             cursor: pointer; 
-            background-color: white; 
             font-weight: bold;
         }
-        
-        .restricted { 
-            background-color: #d1d8e0; 
-            color: #4b6584; 
-            font-size: 10px; 
+
+        /* Objetos prohibidos (No puede estar ocupado) */
+        .bloqueado { 
+            background-color: #dcdde1; 
+            color: #7f8c8d; 
+            font-size: 8px; 
             text-align: center; 
-            border: 1px solid #a5b1c2; 
             cursor: not-allowed; 
+        }
+
+        /* Objetos usables (Puede estar ocupado) */
+        .usable { 
+            background-color: #f1f2f6; 
+            border: 1px dashed #a5b1c2;
+            cursor: pointer;
         }
 
         #pistas-container { 
@@ -44,6 +52,7 @@
             padding: 15px; 
             border-radius: 8px; 
             box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
+            margin-bottom: 20px;
         }
     </style>
 </head>
