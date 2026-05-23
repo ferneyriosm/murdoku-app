@@ -2,7 +2,11 @@
   "titulo": "Netflix y Asesinato",
   "pistas": [
     {"personaje": "Austin", "texto": "Estaba al lado de un estante."},
-    {"personaje": "Bárbara", "texto": "Estaba en la cama."}
+    {"personaje": "Bárbara", "texto": "Estaba en la cama."},
+    {"personaje": "Charlotte", "texto": "Era la única persona sentada en una silla."},
+    {"personaje": "Dean", "texto": "Estaba en la cocina."},
+    {"personaje": "Enid", "texto": "Estaba al lado del televisor."},
+    {"personaje": "Vaughn", "texto": "La víctima."}
   ],
   "etiquetasFilas": ["Austin", "Bárbara", "Charlotte", "Dean", "Enid", "Vaughn"],
   "etiquetasColumnas": ["Dormitorio", "Baño", "Cocina", "Sala", "Patio", "Ático"],
