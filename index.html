@@ -1,5 +1,3 @@
-
-<!--12-->
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -8,76 +6,34 @@
     <style>
         body { font-family: 'Segoe UI', sans-serif; text-align: center; background-color: #eef2f3; padding: 20px; }
         .hidden { display: none; }
-        
-        /* Contenedor del tablero (solo el tablero) */
-        .game-wrapper { 
-            display: inline-block;
-            background: white;
-            padding: 10px;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-            margin: 20px auto;
-        }
-
-        #grid-container { 
-            display: grid; 
-            gap: 0px; 
-            justify-content: center;
-            border: 1px solid #ccc;
-        }
-        
-        .cell { 
-            width: 55px; height: 55px; 
-            background-color: white; 
-            border: 1px solid #e0e0e0;
-            position: relative; 
-            display: flex; align-items: center; justify-content: center; 
-            cursor: pointer;
-            box-sizing: border-box;
-        }
-
+        .game-wrapper { display: inline-block; background: white; padding: 10px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.15); margin: 20px auto; }
+        #grid-container { display: grid; gap: 0px; justify-content: center; border: 1px solid #ccc; }
+        .cell { width: 55px; height: 55px; background-color: white; border: 1px solid #e0e0e0; position: relative; display: flex; align-items: center; justify-content: center; cursor: pointer; box-sizing: border-box; }
         .object-name { position: absolute; top: 2px; left: 4px; font-size: 9px; color: #b2bec3; pointer-events: none; }
         .mark { font-size: 24px; font-weight: bold; color: #2c3e50; pointer-events: none; }
         .bloqueado { background-color: #f8f9fa; cursor: not-allowed; }
-
-        /* Contenedor de puntos separado */
-        .score-display {
-            margin-top: 15px; font-size: 1.2rem; font-weight: bold; color: #2f3640;
-        }
-
-        /* Área de pistas más ancha */
-        #pistas-container { 
-            text-align: left; background: white; padding: 20px; border-radius: 8px; 
-            margin: 0 auto 20px auto; max-width: 600px; /* Ampliado */
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05); 
-        }
-        
+        .score-display { margin-top: 15px; font-size: 1.2rem; font-weight: bold; color: #2f3640; }
+        #pistas-container { text-align: left; background: white; padding: 20px; border-radius: 8px; margin: 0 auto 20px auto; max-width: 600px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         button { padding: 10px 20px; cursor: pointer; border: none; border-radius: 5px; background: #2f3640; color: white; font-size: 16px; margin: 5px; }
         button:hover { background: #57606f; }
     </style>
 </head>
 <body>
-
     <div id="pantalla-inicio">
         <h1>Bienvenido al Murdoku</h1>
         <button onclick="iniciarProceso()">Comenzar Juego</button>
     </div>
-
     <div id="pantalla-juego" class="hidden">
         <h2 id="titulo-nivel"></h2>
         <div id="pistas-container"></div>
-        
         <div class="game-wrapper">
             <div id="grid-container"></div>
         </div>
-
         <div class="score-display">Puntos totales: <span id="puntos">0</span></div>
-        
         <br>
         <button id="btn-comprobar" onclick="juego.comprobar()">Comprobar Solución</button>
         <button id="btn-siguiente" class="hidden" onclick="juego.limpiarYReiniciar()">Siguiente Nivel / Reiniciar</button>
     </div>
-
     <script src="juego.js"></script>
 </body>
 </html>
