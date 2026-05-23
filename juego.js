@@ -1,9 +1,9 @@
-// 1. Definimos las clases primero
 class Nivel {
-    constructor(titulo, pistas, etiquetasFilas, restricciones) {
+    constructor(titulo, pistas, etiquetasFilas, etiquetasColumnas, restricciones) {
         this.titulo = titulo;
         this.pistas = pistas;
         this.etiquetasFilas = etiquetasFilas;
+        this.etiquetasColumnas = etiquetasColumnas;
         this.restricciones = restricciones;
     }
 }
@@ -36,9 +36,13 @@ class Murdoku {
 
     renderizarEtiquetas() {
         const rowHeader = document.getElementById('row-headers');
-        rowHeader.style.display = 'grid';
+        const colHeader = document.getElementById('col-headers');
+
         rowHeader.style.gridTemplateRows = `repeat(${this.tamaño}, 40px)`;
         rowHeader.innerHTML = this.nivel.etiquetasFilas.map(e => `<div class="header-cell">${e}</div>`).join('');
+
+        colHeader.style.gridTemplateColumns = `repeat(${this.tamaño}, 40px)`;
+        colHeader.innerHTML = this.nivel.etiquetasColumnas.map(e => `<div class="header-cell">${e}</div>`).join('');
     }
 
     renderizarTablero() {
@@ -50,8 +54,11 @@ class Murdoku {
             const celda = document.createElement('div');
             celda.className = 'cell';
 
-            if (this.nivel.restricciones.includes(i)) {
+            const restriccion = this.nivel.restricciones.find(r => r.index === i);
+
+            if (restriccion) {
                 celda.classList.add('restricted');
+                celda.innerText = restriccion.nombre;
             } else {
                 if (this.estadoCeldas[i] === 1) celda.innerText = 'O';
                 if (this.estadoCeldas[i] === 2) celda.innerText = 'X';
@@ -67,22 +74,16 @@ class Murdoku {
     }
 }
 
-// 2. Variable global para guardar el juego
 let juego; 
 
-// 3. Función global que llama el botón del HTML
 async function iniciarProceso() {
     try {
         const respuesta = await fetch('niveles/nivel1.json');
         const datos = await respuesta.json();
 
-        // Creamos la instancia del nivel y del juego
-        const nivel = new Nivel(datos.titulo, datos.pistas, datos.etiquetasFilas, datos.restricciones);
+        const nivel = new Nivel(datos.titulo, datos.pistas, datos.etiquetasFilas, datos.etiquetasColumnas, datos.restricciones);
         
-        // Asignamos a la variable global
         juego = new Murdoku(6, nivel);
-        
-        // Iniciamos la interfaz
         juego.iniciarInterfaz();
     } catch (error) {
         console.error("Error al cargar el nivel:", error);
