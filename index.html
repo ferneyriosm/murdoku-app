@@ -1,24 +1,28 @@
-
 <!DOCTYPE html>
+<!--12-->
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <title>Murdoku Pro</title>
     <style>
-        /* Fondo de página suave para que el tablero no sea un lienzo blanco vacío */
-        body { font-family: 'Segoe UI', sans-serif; text-align: center; background-color: #eef2f3; padding: 20px; }
+        body { 
+            font-family: 'Segoe UI', sans-serif; 
+            text-align: center; 
+            background-color: #eef2f3; 
+            padding: 20px; 
+        }
         
         .hidden { display: none; }
         
-        /* Contenedor principal que mantiene el tablero y el marcador juntos */
+        /* Contenedor principal que envuelve el tablero y el marcador */
         .game-wrapper { 
             position: relative; 
-            max-width: 400px; 
-            margin: 20px auto; 
+            display: inline-block;
             background: white;
             padding: 10px;
             border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.15); /* Esto le da profundidad sin el fondo gris feo */
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            margin: 20px auto;
         }
 
         #grid-container { 
@@ -29,34 +33,79 @@
         }
         
         .cell { 
-            width: 55px; height: 55px; 
+            width: 55px; 
+            height: 55px; 
             background-color: white; 
-            border: 1px solid #e0e0e0; /* Bordes suaves */
+            border: 1px solid #e0e0e0;
             position: relative; 
-            display: flex; align-items: center; justify-content: center; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
             cursor: pointer;
+            box-sizing: border-box;
         }
 
-        /* Marcador de puntos en esquina inferior */
-        .score-board {
-            position: absolute; bottom: 10px; right: 10px;
-            background: #2f3640; color: white;
-            padding: 5px 10px; border-radius: 5px;
-            font-size: 0.9rem; font-weight: bold;
+        /* Nombre del objeto (esquina superior izquierda) */
+        .object-name { 
+            position: absolute; 
+            top: 2px; 
+            left: 4px; 
+            font-size: 9px; 
+            color: #b2bec3; 
+            pointer-events: none; 
         }
 
-        .object-name { position: absolute; top: 2px; left: 4px; font-size: 9px; color: #b2bec3; pointer-events: none; }
-        .mark { font-size: 24px; font-weight: bold; color: #2c3e50; pointer-events: none; }
+        /* Marca (O / X) */
+        .mark { 
+            font-size: 24px; 
+            font-weight: bold; 
+            color: #2c3e50; 
+            pointer-events: none; 
+        }
+
         .bloqueado { background-color: #f8f9fa; cursor: not-allowed; }
 
-        #pistas-container { text-align: left; background: white; padding: 15px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        button { padding: 10px 20px; cursor: pointer; border: none; border-radius: 5px; background: #2f3640; color: white; }
+        /* Marcador de puntos en esquina inferior derecha */
+        .score-board {
+            position: absolute; 
+            bottom: 10px; 
+            right: 10px;
+            background: #2f3640; 
+            color: white;
+            padding: 5px 10px; 
+            border-radius: 5px;
+            font-size: 0.9rem; 
+            font-weight: bold;
+            pointer-events: none;
+        }
+
+        #pistas-container { 
+            text-align: left; 
+            background: white; 
+            padding: 15px; 
+            border-radius: 8px; 
+            margin: 0 auto 20px auto; 
+            max-width: 400px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05); 
+        }
+        
+        button { 
+            padding: 10px 20px; 
+            cursor: pointer; 
+            border: none; 
+            border-radius: 5px; 
+            background: #2f3640; 
+            color: white; 
+            font-size: 16px;
+        }
+        
+        button:hover { background: #57606f; }
     </style>
 </head>
 <body>
+
     <div id="pantalla-inicio">
         <h1>Bienvenido al Murdoku</h1>
-        <p>Reglas: Descubre quién es el asesino usando la lógica. Una persona por fila y columna.</p>
         <button onclick="iniciarProceso()">Comenzar Juego</button>
     </div>
 
@@ -68,10 +117,12 @@
             <div id="grid-container"></div>
             <div class="score-board">Pts: <span id="puntos">0</span></div>
         </div>
-
+        
+        <br>
         <button onclick="juego.comprobar()">Comprobar Solución</button>
         <button id="btn-siguiente" class="hidden">Siguiente Nivel</button>
     </div>
+
     <script src="juego.js"></script>
 </body>
 </html>
