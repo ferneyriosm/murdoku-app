@@ -1,8 +1,9 @@
 class Nivel {
-    constructor(titulo, pistas, restricciones) {
+    constructor(titulo, pistas, restricciones, solucion) {
         this.titulo = titulo;
         this.pistas = pistas;
         this.restricciones = restricciones;
+        this.solucion = solucion; // Array esperado
     }
 }
 
@@ -11,6 +12,7 @@ class Murdoku {
         this.tamaño = tamaño;
         this.nivel = nivel;
         this.estadoCeldas = new Array(tamaño * tamaño).fill(0);
+        this.puntos = 0;
     }
 
     iniciarInterfaz() {
@@ -21,6 +23,7 @@ class Murdoku {
 
     renderizar() {
         document.getElementById('titulo-nivel').innerText = this.nivel.titulo;
+        document.getElementById('puntos').innerText = this.puntos;
         this.renderizarPistas();
         this.renderizarTablero();
     }
@@ -38,7 +41,6 @@ class Murdoku {
 
         for (let i = 0; i < this.tamaño * this.tamaño; i++) {
             const celda = document.createElement('div');
-            
             const restriccion = this.nivel.restricciones.find(r => r.index === i);
 
             if (restriccion) {
@@ -47,25 +49,43 @@ class Murdoku {
                     celda.className = 'cell bloqueado';
                 } else {
                     celda.className = 'cell usable';
+                    this.aplicarMarca(celda, i);
                     celda.onclick = () => this.manejarClick(i);
                 }
             } else {
                 celda.className = 'cell';
-                if (this.estadoCeldas[i] === 1) celda.innerText = 'O';
-                if (this.estadoCeldas[i] === 2) celda.innerText = 'X';
+                this.aplicarMarca(celda, i);
                 celda.onclick = () => this.manejarClick(i);
             }
             grid.appendChild(celda);
         }
     }
 
+    aplicarMarca(el, i) {
+        if (this.estadoCeldas[i] === 1) el.innerText = 'O';
+        if (this.estadoCeldas[i] === 2) el.innerText = 'X';
+    }
+
     manejarClick(index) {
-        // Solo cambiar si no es un objeto bloqueado
         const restriccion = this.nivel.restricciones.find(r => r.index === index);
         if (restriccion && restriccion.tipo === 'bloqueado') return;
 
         this.estadoCeldas[index] = (this.estadoCeldas[index] + 1) % 3;
         this.renderizarTablero();
+    }
+
+    comprobar() {
+        // Comparamos el estado actual con la solución del nivel
+        const esCorrecto = JSON.stringify(this.estadoCeldas) === JSON.stringify(this.nivel.solucion);
+        
+        if (esCorrecto) {
+            this.puntos += 100;
+            document.getElementById('puntos').innerText = this.puntos;
+            document.getElementById('btn-siguiente').classList.remove('hidden');
+            alert("¡Felicidades! Has resuelto el misterio.");
+        } else {
+            alert("Aún no es correcto, revisa tus pistas.");
+        }
     }
 }
 
@@ -75,7 +95,7 @@ async function iniciarProceso() {
     try {
         const respuesta = await fetch('niveles/nivel1.json');
         const datos = await respuesta.json();
-        const nivel = new Nivel(datos.titulo, datos.pistas, datos.restricciones);
+        const nivel = new Nivel(datos.titulo, datos.pistas, datos.restricciones, datos.solucion);
         juego = new Murdoku(6, nivel);
         juego.iniciarInterfaz();
     } catch (error) {
