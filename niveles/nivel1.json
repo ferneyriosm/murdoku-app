@@ -14,5 +14,6 @@
     {"index": 5, "nombre": "Planta", "tipo": "bloqueado"},
     {"index": 30, "nombre": "Mesa", "tipo": "bloqueado"},
     {"index": 35, "nombre": "TV", "tipo": "bloqueado"}
-  ]
+  ],
+  "solucion": [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 }
