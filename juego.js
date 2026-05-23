@@ -1,4 +1,3 @@
-//12
 class Nivel {
     constructor(titulo, pistas, restricciones, solucion) {
         this.titulo = titulo;
@@ -14,6 +13,7 @@ class Murdoku {
         this.nivel = nivel;
         this.estadoCeldas = new Array(tamaño * tamaño).fill(0);
         this.puntos = 0;
+        this.nivelCompletado = false; // Bandera para controlar puntos
     }
 
     iniciarInterfaz() {
@@ -51,7 +51,6 @@ class Murdoku {
             celda.className = 'cell';
             celda.onclick = () => this.manejarClick(i);
 
-            // Añadir nombre del objeto si existe
             if (restriccion) {
                 const label = document.createElement('span');
                 label.className = 'object-name';
@@ -64,7 +63,6 @@ class Murdoku {
                 }
             }
 
-            // Añadir la marca O/X
             if (this.estadoCeldas[i] !== 0) {
                 const mark = document.createElement('span');
                 mark.className = 'mark';
@@ -77,22 +75,39 @@ class Murdoku {
     }
 
     manejarClick(index) {
-        // Ciclo: 0 (vacío) -> 1 (O) -> 2 (X) -> 0
+        // No permitir clics si el nivel ya está completado
+        if (this.nivelCompletado) return;
+        
         this.estadoCeldas[index] = (this.estadoCeldas[index] + 1) % 3;
         this.renderizarTablero();
     }
 
     comprobar() {
+        if (this.nivelCompletado) return; // Evitar sumar puntos extra
+
         const esCorrecto = JSON.stringify(this.estadoCeldas) === JSON.stringify(this.nivel.solucion);
         
         if (esCorrecto) {
             this.puntos += 100;
+            this.nivelCompletado = true;
             this.actualizarPuntos();
             document.getElementById('btn-siguiente').classList.remove('hidden');
+            document.getElementById('btn-comprobar').classList.add('hidden'); // Ocultar comprobar
             alert("¡Felicidades! Has resuelto el misterio.");
         } else {
             alert("Aún no es correcto. Recuerda marcar 'O' donde van las personas.");
         }
+    }
+
+    limpiarYReiniciar() {
+        this.estadoCeldas = new Array(this.tamaño * this.tamaño).fill(0);
+        this.nivelCompletado = false;
+        
+        // Resetear botones
+        document.getElementById('btn-siguiente').classList.add('hidden');
+        document.getElementById('btn-comprobar').classList.remove('hidden');
+        
+        this.renderizar();
     }
 }
 
