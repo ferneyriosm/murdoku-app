@@ -1,17 +1,26 @@
 {
   "titulo": "Murdoku 6x6",
   "pistas": [
-    {"personaje": "V", "texto": "La víctima, está en el dormitorio."}
+    {"personaje": "C", "texto": "La víctima estaba con un vaso."},
+    {"personaje": "D", "texto": "El sospechoso tiene ojos verdes."},
+    {"personaje": "A", "texto": "Hay una huella parcial en la TV."}
   ],
   "restricciones": [
     {"index": 0, "nombre": "Cama", "tipo": "bloqueado"},
-    {"index": 5, "nombre": "Planta", "tipo": "bloqueado"},
+    {"index": 2, "nombre": "Estante", "tipo": "bloqueado"},
+    {"index": 4, "nombre": "Planta", "tipo": "bloqueado"},
     {"index": 30, "nombre": "Mesa", "tipo": "bloqueado"},
     {"index": 35, "nombre": "TV", "tipo": "bloqueado"}
   ],
+  "roomLabels": [
+    {"index": 2, "text": "DORMITORIO"},
+    {"index": 5, "text": "BAÑO"},
+    {"index": 24, "text": "COCINA"},
+    {"index": 33, "text": "SALA DE ESTAR"}
+  ],
   "solucion": [
     0, 0, 0, 0, 0, 0,
-    0, 1, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0,
