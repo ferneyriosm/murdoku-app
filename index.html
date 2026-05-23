@@ -4,13 +4,16 @@
     <meta charset="UTF-8">
     <title>Murdoku Pro</title>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; }
+        body { font-family: Arial, sans-serif; text-align: center; background-color: #f9f9f9; }
         .hidden { display: none; }
-        .game-wrapper { display: inline-grid; grid-template-columns: 150px 1fr; margin-top: 20px; }
+        .game-wrapper { display: inline-grid; grid-template-columns: 120px 1fr; margin-top: 20px; text-align: left; }
+        #main-board { display: flex; flex-direction: column; }
+        #col-headers { display: grid; gap: 2px; margin-left: 2px; }
         #grid-container { display: grid; gap: 2px; }
-        .cell { width: 40px; height: 40px; border: 1px solid black; display: flex; align-items: center; justify-content: center; cursor: pointer; }
-        .restricted { background-color: #555; cursor: not-allowed; }
-        .header-cell { height: 40px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; }
+        .cell { width: 40px; height: 40px; border: 1px solid #999; display: flex; align-items: center; justify-content: center; cursor: pointer; background-color: white; }
+        .restricted { background-color: #ddd; color: #555; font-size: 8px; text-align: center; border: 1px solid #999; cursor: not-allowed; }
+        #row-headers { display: grid; gap: 2px; padding-top: 42px; } /* Ajuste para alinear con columnas */
+        .header-cell { height: 40px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold; background: #eee; border: 1px solid #ccc; }
     </style>
 </head>
 <body>
@@ -23,10 +26,13 @@
 
     <div id="pantalla-juego" class="hidden">
         <h2 id="titulo-nivel"></h2>
-        <div id="pistas-container" style="text-align: left; margin: 20px;"></div>
+        <div id="pistas-container" style="text-align: left; margin: 20px; max-width: 600px; margin-left: auto; margin-right: auto;"></div>
         <div class="game-wrapper">
             <div id="row-headers"></div>
-            <div id="grid-container"></div>
+            <div id="main-board">
+                <div id="col-headers"></div>
+                <div id="grid-container"></div>
+            </div>
         </div>
     </div>
 
