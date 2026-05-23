@@ -1,9 +1,9 @@
 class Nivel {
-    constructor(titulo, pistas, etiquetasFilas, etiquetasColumnas) {
+    constructor(titulo, pistas, etiquetasFilas, restricciones) {
         this.titulo = titulo;
-        this.pistas = pistas;
+        this.pistas = pistas; // Array de objetos {personaje, texto}
         this.etiquetasFilas = etiquetasFilas;
-        this.etiquetasColumnas = etiquetasColumnas;
+        this.restricciones = restricciones; // Array de índices de celdas bloqueadas
     }
 }
 
@@ -14,7 +14,14 @@ class Murdoku {
         this.estadoCeldas = new Array(tamaño * tamaño).fill(0);
     }
 
+    iniciarJuego() {
+        document.getElementById('pantalla-inicio').classList.add('hidden');
+        document.getElementById('pantalla-juego').classList.remove('hidden');
+        this.renderizar();
+    }
+
     renderizar() {
+        document.getElementById('titulo-nivel').innerText = this.nivel.titulo;
         this.renderizarPistas();
         this.renderizarEtiquetas();
         this.renderizarTablero();
@@ -22,36 +29,34 @@ class Murdoku {
 
     renderizarPistas() {
         const contenedor = document.getElementById('pistas-container');
-        contenedor.innerHTML = `<h2>${this.nivel.titulo}</h2><ul>` + 
-            this.nivel.pistas.map(p => `<li>${p}</li>`).join('') + `</ul>`;
+        contenedor.innerHTML = '<h3>Pistas:</h3><ul>' + 
+            this.nivel.pistas.map(p => `<li><strong>${p.personaje}:</strong> ${p.texto}</li>`).join('') + '</ul>';
     }
 
     renderizarEtiquetas() {
         const rowHeader = document.getElementById('row-headers');
-        const colHeader = document.getElementById('col-headers');
-
+        rowHeader.style.display = 'grid';
+        rowHeader.style.gridTemplateRows = `repeat(${this.tamaño}, 40px)`;
         rowHeader.innerHTML = this.nivel.etiquetasFilas.map(e => `<div class="header-cell">${e}</div>`).join('');
-        colHeader.innerHTML = this.nivel.etiquetasColumnas.map(e => `<div class="header-cell">${e}</div>`).join('');
     }
 
     renderizarTablero() {
         const grid = document.getElementById('grid-container');
+        grid.style.gridTemplateColumns = `repeat(${this.tamaño}, 40px)`;
         grid.innerHTML = ''; 
 
         for (let i = 0; i < this.tamaño * this.tamaño; i++) {
             const celda = document.createElement('div');
-            celda.style.border = '1px solid black';
-            celda.style.width = '40px';
-            celda.style.height = '40px';
-            celda.style.display = 'flex';
-            celda.style.justifyContent = 'center';
-            celda.style.alignItems = 'center';
-            celda.style.cursor = 'pointer';
+            celda.className = 'cell';
 
-            if (this.estadoCeldas[i] === 1) celda.innerText = 'O';
-            if (this.estadoCeldas[i] === 2) celda.innerText = 'X';
-
-            celda.onclick = () => this.manejarClick(i);
+            // Lógica de restricciones
+            if (this.nivel.restricciones.includes(i)) {
+                celda.classList.add('restricted');
+            } else {
+                if (this.estadoCeldas[i] === 1) celda.innerText = 'O';
+                if (this.estadoCeldas[i] === 2) celda.innerText = 'X';
+                celda.onclick = () => this.manejarClick(i);
+            }
             grid.appendChild(celda);
         }
     }
@@ -62,12 +67,18 @@ class Murdoku {
     }
 }
 
-// Inicialización con datos de ejemplo
+// Datos del Nivel 1 (Netflix y Asesinato)
+const pistasNivel1 = [
+    {personaje: "Austin", texto: "Estaba al lado de un estante."},
+    {personaje: "Bárbara", texto: "Estaba en la cama."},
+    {personaje: "Charlotte", texto: "Era la única persona sentada en una silla."},
+    {personaje: "Dean", texto: "Estaba en la cocina."},
+    {personaje: "Enid", texto: "Estaba al lado del televisor."},
+    {personaje: "Vaughn", texto: "La víctima."}
+];
+
 const personajes = ["Austin", "Bárbara", "Charlotte", "Dean", "Enid", "Vaughn"];
-const habitaciones = ["Dormitorio", "Baño", "Cocina", "Sala", "Patio", "Ático"];
-const pistas = ["Vaughn es la víctima.", "Dean estaba en la cocina."];
+const celdasRestringidas = [0, 5, 35]; // Ejemplo: índices que no se pueden tocar
 
-const nivel1 = new Nivel("Netflix y Asesinato", pistas, personajes, habitaciones);
+const nivel1 = new Nivel("Netflix y Asesinato", pistasNivel1, personajes, celdasRestringidas);
 const juego = new Murdoku(6, nivel1);
-
-juego.renderizar();
