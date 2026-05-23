@@ -1,17 +1,23 @@
-// 1. Clase para manejar los datos del nivel
 class Nivel {
-    constructor(titulo, pistas) {
+    constructor(titulo, pistas, etiquetasFilas, etiquetasColumnas) {
         this.titulo = titulo;
         this.pistas = pistas;
+        this.etiquetasFilas = etiquetasFilas;
+        this.etiquetasColumnas = etiquetasColumnas;
     }
 }
 
-// 2. Clase para manejar la lógica del juego
 class Murdoku {
     constructor(tamaño, nivel) {
         this.tamaño = tamaño;
         this.nivel = nivel;
-        this.estadoCeldas = new Array(tamaño * tamaño).fill(0); // 0: Vacío, 1: Marcado, 2: Descartado
+        this.estadoCeldas = new Array(tamaño * tamaño).fill(0);
+    }
+
+    renderizar() {
+        this.renderizarPistas();
+        this.renderizarEtiquetas();
+        this.renderizarTablero();
     }
 
     renderizarPistas() {
@@ -20,11 +26,17 @@ class Murdoku {
             this.nivel.pistas.map(p => `<li>${p}</li>`).join('') + `</ul>`;
     }
 
+    renderizarEtiquetas() {
+        const rowHeader = document.getElementById('row-headers');
+        const colHeader = document.getElementById('col-headers');
+
+        rowHeader.innerHTML = this.nivel.etiquetasFilas.map(e => `<div class="header-cell">${e}</div>`).join('');
+        colHeader.innerHTML = this.nivel.etiquetasColumnas.map(e => `<div class="header-cell">${e}</div>`).join('');
+    }
+
     renderizarTablero() {
         const grid = document.getElementById('grid-container');
-        grid.style.display = 'grid';
-        grid.style.gridTemplateColumns = `repeat(${this.tamaño}, 40px)`;
-        grid.innerHTML = ''; // Limpiamos para redibujar
+        grid.innerHTML = ''; 
 
         for (let i = 0; i < this.tamaño * this.tamaño; i++) {
             const celda = document.createElement('div');
@@ -36,7 +48,6 @@ class Murdoku {
             celda.style.alignItems = 'center';
             celda.style.cursor = 'pointer';
 
-            // Dibujar el estado actual
             if (this.estadoCeldas[i] === 1) celda.innerText = 'O';
             if (this.estadoCeldas[i] === 2) celda.innerText = 'X';
 
@@ -51,10 +62,12 @@ class Murdoku {
     }
 }
 
-// 3. Inicialización (donde el juego cobra vida)
-const pistasNivel1 = ["Vaughn es la víctima.", "Dean estaba en la cocina."];
-const nivel1 = new Nivel("Netflix y Asesinato", pistasNivel1);
+// Inicialización con datos de ejemplo
+const personajes = ["Austin", "Bárbara", "Charlotte", "Dean", "Enid", "Vaughn"];
+const habitaciones = ["Dormitorio", "Baño", "Cocina", "Sala", "Patio", "Ático"];
+const pistas = ["Vaughn es la víctima.", "Dean estaba en la cocina."];
+
+const nivel1 = new Nivel("Netflix y Asesinato", pistas, personajes, habitaciones);
 const juego = new Murdoku(6, nivel1);
 
-juego.renderizarPistas();
-juego.renderizarTablero();
+juego.renderizar();
