@@ -1,22 +1,16 @@
-<!DOCTYPE html>
+
 <!--12-->
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <title>Murdoku Pro</title>
     <style>
-        body { 
-            font-family: 'Segoe UI', sans-serif; 
-            text-align: center; 
-            background-color: #eef2f3; 
-            padding: 20px; 
-        }
-        
+        body { font-family: 'Segoe UI', sans-serif; text-align: center; background-color: #eef2f3; padding: 20px; }
         .hidden { display: none; }
         
-        /* Contenedor principal que envuelve el tablero y el marcador */
+        /* Contenedor del tablero (solo el tablero) */
         .game-wrapper { 
-            position: relative; 
             display: inline-block;
             background: white;
             padding: 10px;
@@ -33,72 +27,32 @@
         }
         
         .cell { 
-            width: 55px; 
-            height: 55px; 
+            width: 55px; height: 55px; 
             background-color: white; 
             border: 1px solid #e0e0e0;
             position: relative; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
+            display: flex; align-items: center; justify-content: center; 
             cursor: pointer;
             box-sizing: border-box;
         }
 
-        /* Nombre del objeto (esquina superior izquierda) */
-        .object-name { 
-            position: absolute; 
-            top: 2px; 
-            left: 4px; 
-            font-size: 9px; 
-            color: #b2bec3; 
-            pointer-events: none; 
-        }
-
-        /* Marca (O / X) */
-        .mark { 
-            font-size: 24px; 
-            font-weight: bold; 
-            color: #2c3e50; 
-            pointer-events: none; 
-        }
-
+        .object-name { position: absolute; top: 2px; left: 4px; font-size: 9px; color: #b2bec3; pointer-events: none; }
+        .mark { font-size: 24px; font-weight: bold; color: #2c3e50; pointer-events: none; }
         .bloqueado { background-color: #f8f9fa; cursor: not-allowed; }
 
-        /* Marcador de puntos en esquina inferior derecha */
-        .score-board {
-            position: absolute; 
-            bottom: 10px; 
-            right: 10px;
-            background: #2f3640; 
-            color: white;
-            padding: 5px 10px; 
-            border-radius: 5px;
-            font-size: 0.9rem; 
-            font-weight: bold;
-            pointer-events: none;
+        /* Contenedor de puntos separado */
+        .score-display {
+            margin-top: 15px; font-size: 1.2rem; font-weight: bold; color: #2f3640;
         }
 
+        /* Área de pistas más ancha */
         #pistas-container { 
-            text-align: left; 
-            background: white; 
-            padding: 15px; 
-            border-radius: 8px; 
-            margin: 0 auto 20px auto; 
-            max-width: 400px;
+            text-align: left; background: white; padding: 20px; border-radius: 8px; 
+            margin: 0 auto 20px auto; max-width: 600px; /* Ampliado */
             box-shadow: 0 2px 5px rgba(0,0,0,0.05); 
         }
         
-        button { 
-            padding: 10px 20px; 
-            cursor: pointer; 
-            border: none; 
-            border-radius: 5px; 
-            background: #2f3640; 
-            color: white; 
-            font-size: 16px;
-        }
-        
+        button { padding: 10px 20px; cursor: pointer; border: none; border-radius: 5px; background: #2f3640; color: white; font-size: 16px; margin: 5px; }
         button:hover { background: #57606f; }
     </style>
 </head>
@@ -115,12 +69,13 @@
         
         <div class="game-wrapper">
             <div id="grid-container"></div>
-            <div class="score-board">Pts: <span id="puntos">0</span></div>
         </div>
+
+        <div class="score-display">Puntos totales: <span id="puntos">0</span></div>
         
         <br>
-        <button onclick="juego.comprobar()">Comprobar Solución</button>
-        <button id="btn-siguiente" class="hidden">Siguiente Nivel</button>
+        <button id="btn-comprobar" onclick="juego.comprobar()">Comprobar Solución</button>
+        <button id="btn-siguiente" class="hidden" onclick="juego.limpiarYReiniciar()">Siguiente Nivel / Reiniciar</button>
     </div>
 
     <script src="juego.js"></script>
