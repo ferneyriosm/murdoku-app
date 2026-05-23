@@ -1,2 +1,1 @@
-# murdoku-app
-Web para crear murdokus de forma online
+Esto fue creado como proyecto de media noche con ayuda de IA y siguiendo multoples acertijos encontrados en linea, la inspiracion del juego viene de los libros murdoku. Este proyecto no busca ser una copia fiel, si no por el contrario hacer homenaje y permitir jugar en cualquier parte del mundo sin mayor complejudad
