@@ -1,10 +1,8 @@
-//Actualizado
+//Listo
 class Nivel {
-    constructor(titulo, pistas, etiquetasFilas, etiquetasColumnas, restricciones) {
+    constructor(titulo, pistas, restricciones) {
         this.titulo = titulo;
         this.pistas = pistas;
-        this.etiquetasFilas = etiquetasFilas;
-        this.etiquetasColumnas = etiquetasColumnas;
         this.restricciones = restricciones;
     }
 }
@@ -25,7 +23,6 @@ class Murdoku {
     renderizar() {
         document.getElementById('titulo-nivel').innerText = this.nivel.titulo;
         this.renderizarPistas();
-        this.renderizarEtiquetas();
         this.renderizarTablero();
     }
 
@@ -35,20 +32,9 @@ class Murdoku {
             this.nivel.pistas.map(p => `<li><strong>${p.personaje}:</strong> ${p.texto}</li>`).join('') + '</ul>';
     }
 
-    renderizarEtiquetas() {
-        const rowHeader = document.getElementById('row-headers');
-        const colHeader = document.getElementById('col-headers');
-
-        rowHeader.style.gridTemplateRows = `repeat(${this.tamaño}, 40px)`;
-        rowHeader.innerHTML = this.nivel.etiquetasFilas.map(e => `<div class="header-cell">${e}</div>`).join('');
-
-        colHeader.style.gridTemplateColumns = `repeat(${this.tamaño}, 40px)`;
-        colHeader.innerHTML = this.nivel.etiquetasColumnas.map(e => `<div class="header-cell">${e}</div>`).join('');
-    }
-
     renderizarTablero() {
         const grid = document.getElementById('grid-container');
-        grid.style.gridTemplateColumns = `repeat(${this.tamaño}, 40px)`;
+        grid.style.gridTemplateColumns = `repeat(${this.tamaño}, 50px)`;
         grid.innerHTML = ''; 
 
         for (let i = 0; i < this.tamaño * this.tamaño; i++) {
@@ -82,7 +68,8 @@ async function iniciarProceso() {
         const respuesta = await fetch('niveles/nivel1.json');
         const datos = await respuesta.json();
 
-        const nivel = new Nivel(datos.titulo, datos.pistas, datos.etiquetasFilas, datos.etiquetasColumnas, datos.restricciones);
+        // Nivel ahora no necesita las etiquetas porque no las renderizamos en pantalla
+        const nivel = new Nivel(datos.titulo, datos.pistas, datos.restricciones);
         
         juego = new Murdoku(6, nivel);
         juego.iniciarInterfaz();
