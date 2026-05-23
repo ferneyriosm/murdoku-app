@@ -1,3 +1,4 @@
+//Actualizado
 class Nivel {
     constructor(titulo, pistas, etiquetasFilas, etiquetasColumnas, restricciones) {
         this.titulo = titulo;
