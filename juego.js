@@ -1,3 +1,4 @@
+//12
 class Nivel {
     constructor(titulo, pistas, restricciones, solucion) {
         this.titulo = titulo;
@@ -83,16 +84,23 @@ class Murdoku {
     }
 
     comprobar() {
-        if (this.nivelCompletado) return; // Evitar sumar puntos extra
+        // Bloqueo de seguridad extra: si ya está completado, no hace nada
+        if (this.nivelCompletado) return; 
 
         const esCorrecto = JSON.stringify(this.estadoCeldas) === JSON.stringify(this.nivel.solucion);
         
         if (esCorrecto) {
             this.puntos += 100;
-            this.nivelCompletado = true;
+            this.nivelCompletado = true; // Marcamos como completado
             this.actualizarPuntos();
+            
+            // 1. Ocultar el botón
+            const btnComprobar = document.getElementById('btn-comprobar');
+            btnComprobar.classList.add('hidden');
+            // 2. Deshabilitar para que no se pueda clickear ni por error
+            btnComprobar.disabled = true;
+
             document.getElementById('btn-siguiente').classList.remove('hidden');
-            document.getElementById('btn-comprobar').classList.add('hidden'); // Ocultar comprobar
             alert("¡Felicidades! Has resuelto el misterio.");
         } else {
             alert("Aún no es correcto. Recuerda marcar 'O' donde van las personas.");
@@ -100,13 +108,18 @@ class Murdoku {
     }
 
     limpiarYReiniciar() {
+        // Resetear datos
         this.estadoCeldas = new Array(this.tamaño * this.tamaño).fill(0);
-        this.nivelCompletado = false;
+        this.nivelCompletado = false; // Importante: volvemos a permitir ganar puntos
         
-        // Resetear botones
+        // Resetear botones UI
+        const btnComprobar = document.getElementById('btn-comprobar');
+        btnComprobar.classList.remove('hidden');
+        btnComprobar.disabled = false; // ¡Volvemos a habilitar el botón!
+        
         document.getElementById('btn-siguiente').classList.add('hidden');
-        document.getElementById('btn-comprobar').classList.remove('hidden');
         
+        // Volver a dibujar
         this.renderizar();
     }
 }
