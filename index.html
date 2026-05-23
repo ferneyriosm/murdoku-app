@@ -2,10 +2,44 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Mi Murdoku</title>
+    <title>Murdoku 6x6</title>
+    <style>
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(6, 50px);
+            grid-template-rows: repeat(6, 50px);
+            gap: 2px;
+            margin-top: 20px;
+        }
+        .cell {
+            width: 50px;
+            height: 50px;
+            border: 1px solid #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 20px;
+            background-color: #f0f0f0;
+        }
+        .cell.checked { background-color: #ddd; }
+    </style>
 </head>
 <body>
-    <h1>Bienvenido a mi Murdoku</h1>
-    <p>Próximamente aquí verás tu cuadrícula 6x6.</p>
+    <h1>Murdoku: Nivel 1</h1>
+    <div class="grid" id="gameGrid"></div>
+
+    <script>
+        const grid = document.getElementById('gameGrid');
+        // Crear la cuadrícula 6x6
+        for (let i = 0; i < 36; i++) {
+            const cell = document.createElement('div');
+            cell.classList.add('cell');
+            cell.addEventListener('click', () => {
+                cell.innerText = cell.innerText === 'X' ? '' : 'X';
+            });
+            grid.appendChild(cell);
+        }
+    </script>
 </body>
 </html>
