@@ -1,9 +1,11 @@
+//Listo
+
 class Nivel {
     constructor(titulo, pistas, restricciones, solucion) {
         this.titulo = titulo;
         this.pistas = pistas;
         this.restricciones = restricciones;
-        this.solucion = solucion; // Array esperado
+        this.solucion = solucion;
     }
 }
 
@@ -42,49 +44,50 @@ class Murdoku {
         for (let i = 0; i < this.tamaño * this.tamaño; i++) {
             const celda = document.createElement('div');
             const restriccion = this.nivel.restricciones.find(r => r.index === i);
+            
+            celda.className = 'cell';
+            celda.onclick = () => this.manejarClick(i);
 
+            // 1. Añadir nombre si es restricción
             if (restriccion) {
-                celda.innerText = restriccion.nombre;
+                const label = document.createElement('span');
+                label.className = 'object-name';
+                label.innerText = restriccion.nombre;
+                celda.appendChild(label);
+                
                 if (restriccion.tipo === 'bloqueado') {
-                    celda.className = 'cell bloqueado';
-                } else {
-                    celda.className = 'cell usable';
-                    this.aplicarMarca(celda, i);
-                    celda.onclick = () => this.manejarClick(i);
+                    celda.classList.add('bloqueado');
+                    celda.onclick = null; // No hace nada si está bloqueado
                 }
-            } else {
-                celda.className = 'cell';
-                this.aplicarMarca(celda, i);
-                celda.onclick = () => this.manejarClick(i);
             }
+
+            // 2. Añadir marca (O / X)
+            if (this.estadoCeldas[i] !== 0) {
+                const mark = document.createElement('span');
+                mark.className = 'mark';
+                mark.innerText = this.estadoCeldas[i] === 1 ? 'O' : 'X';
+                celda.appendChild(mark);
+            }
+
             grid.appendChild(celda);
         }
     }
 
-    aplicarMarca(el, i) {
-        if (this.estadoCeldas[i] === 1) el.innerText = 'O';
-        if (this.estadoCeldas[i] === 2) el.innerText = 'X';
-    }
-
     manejarClick(index) {
-        const restriccion = this.nivel.restricciones.find(r => r.index === index);
-        if (restriccion && restriccion.tipo === 'bloqueado') return;
-
+        // Ciclo: 0 (vacío) -> 1 (O) -> 2 (X) -> 0
         this.estadoCeldas[index] = (this.estadoCeldas[index] + 1) % 3;
         this.renderizarTablero();
     }
 
     comprobar() {
-        // Comparamos el estado actual con la solución del nivel
         const esCorrecto = JSON.stringify(this.estadoCeldas) === JSON.stringify(this.nivel.solucion);
-        
         if (esCorrecto) {
             this.puntos += 100;
             document.getElementById('puntos').innerText = this.puntos;
             document.getElementById('btn-siguiente').classList.remove('hidden');
             alert("¡Felicidades! Has resuelto el misterio.");
         } else {
-            alert("Aún no es correcto, revisa tus pistas.");
+            alert("Aún no es correcto. Recuerda marcar 'O' donde van las personas.");
         }
     }
 }
