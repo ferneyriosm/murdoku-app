@@ -9,20 +9,21 @@
         
         #pantalla-juego { max-width: 800px; margin: 0 auto; }
         
+        /* Contenedor limpio sin fondos oscuros */
         #grid-container { 
             display: grid; 
             gap: 2px; 
             margin: 20px auto; 
             justify-content: center;
-            background-color: #333;
+            background-color: #fff; 
             padding: 2px;
-            border: 2px solid #333;
         }
         
         .cell { 
             width: 50px; 
             height: 50px; 
             background-color: white; 
+            border: 1px solid #ccc;
             display: flex; 
             align-items: center; 
             justify-content: center; 
@@ -30,44 +31,28 @@
             font-weight: bold;
         }
 
-        /* Objetos prohibidos (No puede estar ocupado) */
-        .bloqueado { 
-            background-color: #dcdde1; 
-            color: #7f8c8d; 
-            font-size: 8px; 
-            text-align: center; 
-            cursor: not-allowed; 
-        }
+        .bloqueado { background-color: #dcdde1; color: #7f8c8d; font-size: 8px; text-align: center; cursor: not-allowed; border: 1px solid #a5b1c2; }
+        .usable { background-color: #f1f2f6; border: 1px dashed #a5b1c2; cursor: pointer; }
 
-        /* Objetos usables (Puede estar ocupado) */
-        .usable { 
-            background-color: #f1f2f6; 
-            border: 1px dashed #a5b1c2;
-            cursor: pointer;
-        }
-
-        #pistas-container { 
-            text-align: left; 
-            background: white; 
-            padding: 15px; 
-            border-radius: 8px; 
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
-            margin-bottom: 20px;
-        }
+        #stats { font-size: 1.2rem; font-weight: bold; margin: 10px; }
+        #pistas-container { text-align: left; background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        button { padding: 10px 20px; font-size: 16px; cursor: pointer; margin: 5px; }
     </style>
 </head>
 <body>
 
     <div id="pantalla-inicio">
         <h1>Bienvenido al Murdoku</h1>
-        <p>Reglas: Descubre quién es el asesino usando la lógica.</p>
         <button onclick="iniciarProceso()">Comenzar Juego</button>
     </div>
 
     <div id="pantalla-juego" class="hidden">
+        <div id="stats">Puntos: <span id="puntos">0</span></div>
         <h2 id="titulo-nivel"></h2>
         <div id="pistas-container"></div>
         <div id="grid-container"></div>
+        <button onclick="juego.comprobar()">Comprobar Solución</button>
+        <button id="btn-siguiente" class="hidden">Siguiente Nivel</button>
     </div>
 
     <script src="juego.js"></script>
