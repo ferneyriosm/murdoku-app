@@ -2,44 +2,57 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Murdoku 6x6</title>
-    <style>
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(6, 50px);
-            grid-template-rows: repeat(6, 50px);
-            gap: 2px;
-            margin-top: 20px;
-        }
-        .cell {
-            width: 50px;
-            height: 50px;
-            border: 1px solid #333;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            font-size: 20px;
-            background-color: #f0f0f0;
-        }
-        .cell.checked { background-color: #ddd; }
-    </style>
+    <title>Murdoku Pro</title>
 </head>
 <body>
-    <h1>Murdoku: Nivel 1</h1>
-    <div class="grid" id="gameGrid"></div>
+    <div id="pistas-container"></div>
+    <div id="grid-container"></div>
 
     <script>
-        const grid = document.getElementById('gameGrid');
-        // Crear la cuadrícula 6x6
-        for (let i = 0; i < 36; i++) {
-            const cell = document.createElement('div');
-            cell.classList.add('cell');
-            cell.addEventListener('click', () => {
-                cell.innerText = cell.innerText === 'X' ? '' : 'X';
-            });
-            grid.appendChild(cell);
+        // 1. Clase para manejar los datos del nivel
+        class Nivel {
+            constructor(titulo, pistas) {
+                this.titulo = titulo;
+                this.pistas = pistas;
+            }
         }
+
+        // 2. Clase para manejar la lógica del juego
+        class Murdoku {
+            constructor(tamaño, nivel) {
+                this.tamaño = tamaño;
+                this.nivel = nivel;
+            }
+
+            renderizarPistas() {
+                const contenedor = document.getElementById('pistas-container');
+                contenedor.innerHTML = `<h2>${this.nivel.titulo}</h2><ul>` + 
+                    this.nivel.pistas.map(p => `<li>${p}</li>`).join('') + `</ul>`;
+            }
+
+            renderizarTablero() {
+                const grid = document.getElementById('grid-container');
+                grid.style.display = 'grid';
+                grid.style.gridTemplateColumns = `repeat(${this.tamaño}, 40px)`;
+                
+                for (let i = 0; i < this.tamaño * this.tamaño; i++) {
+                    const celda = document.createElement('div');
+                    celda.style.border = '1px solid black';
+                    celda.style.width = '40px';
+                    celda.style.height = '40px';
+                    celda.onclick = () => console.log('Celda clicada');
+                    grid.appendChild(celda);
+                }
+            }
+        }
+
+        // 3. Inicialización
+        const pistasNivel1 = ["Vaughn es la víctima.", "Dean estaba en la cocina."];
+        const nivel1 = new Nivel("Netflix y Asesinato", pistasNivel1);
+        const juego = new Murdoku(6, nivel1);
+
+        juego.renderizarPistas();
+        juego.renderizarTablero();
     </script>
 </body>
 </html>
